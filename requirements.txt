@@ -1,3 +1,4 @@
 ffmpy==0.2.2
 watchdog==0.8.3
 requests==2.13.0
+giphypop==0.3

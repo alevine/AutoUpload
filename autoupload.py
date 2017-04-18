@@ -1,7 +1,9 @@
 from __future__ import print_function
-import sys
-import time
+from sys import argv
+from time import sleep
+from os import system
 import ffmpy
+from giphypop import upload
 from watchdog.observers import Observer
 from watchdog.events import PatternMatchingEventHandler
 
@@ -14,27 +16,40 @@ class HandleDVR(PatternMatchingEventHandler):
         print(event.src_path)
         convert(event.src_path)
 
-    def on_modified(self, event):
-        pass
-
     def on_created(self, event):
         self.process(event)
 
+
 def convert(input_path):
+    output_path = input_path.replace('.mp4', '.gif')
+
     conversion = ffmpy.FFmpeg(
             inputs={input_path: None},
-            outputs={input_path.replace('.mp4', '.gif'): None}
+            outputs={output_path: 'fps=60,scale=320:-1:flags=lanczos [x]; [x][1:v] paletteuse'}
     )
     conversion.run()
 
+    upload_to_giphy(output_path)
+
+
+def upload_to_giphy(path_to_file):
+    gif = upload([], path_to_file)
+    copy_to_clipboard(gif.media_url)
+
+
+def copy_to_clipboard(text):
+    command = 'echo ' + text.strip() + '| clip'
+    system(command)
+
+
 def main():
-    path = sys.argv[1] if len(sys.argv) > 1 else '.'
+    path = argv[1] if len(argv) > 1 else '.'
     observer = Observer()
     observer.schedule(HandleDVR(), path, recursive=True)
     observer.start()
     try:
         while True:
-            time.sleep(1)
+            sleep(1)
     except KeyboardInterrupt:
         observer.stop()
 
