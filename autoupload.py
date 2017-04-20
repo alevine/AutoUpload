@@ -10,6 +10,10 @@ from watchdog.events import PatternMatchingEventHandler
 
 
 class HandleDVR(PatternMatchingEventHandler):
+    """
+    Extends a watchdog class (PatternMatchingEventHandler) to handle watching a folder for
+    mp4 files created by xbox DVR.
+    """
     patterns = ["*.mp4"]
 
     @staticmethod
@@ -36,7 +40,8 @@ def convert(input_path):
     check_call(['ffmpeg', '-v', 'warning', '-i', input_path, '-vf', filters + ",palettegen", '-y', palette_path])
 
     # generate gif
-    check_call(['ffmpeg', '-v', 'warning', '-i', input_path, '-i', palette_path, '-lavfi', filters + '[x]; [x][1:v] paletteuse', '-y', output_path])
+    check_call(['ffmpeg', '-v', 'warning', '-i', input_path, '-i', palette_path, '-lavfi',
+                filters + '[x]; [x][1:v] paletteuse', '-y', output_path])
 
     upload_to_giphy(output_path)
 
@@ -48,16 +53,19 @@ def upload_to_giphy(path_to_file):
     """
     files = {'file': open(path_to_file, 'rb')}
 
-    giphy_request = post('http://upload.giphy.com/v1/gifs', data={'username':'AJwr', 'api_key':'dc6zaTOxFJmzC'}, files=files)
+    giphy_request = post('http://upload.giphy.com/v1/gifs',
+                         data={'username': 'AJwr', 'api_key': 'dc6zaTOxFJmzC'}, files=files)
 
     media_id = giphy_request.json()['data']['id']
-    media_url = 'https://media3.giphy.com/media/%s/giphy.gif' % (media_id)
+    media_url = 'https://media3.giphy.com/media/%s/giphy.gif' % media_id
 
     print(media_url)
     copy_to_clipboard(media_url)
 
+
 def copy_to_clipboard(text):
     pyperclip.copy(text)
+
 
 def main():
     path = argv[1] if len(argv) > 1 else '.'
