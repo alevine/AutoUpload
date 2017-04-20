@@ -1,5 +1,5 @@
 # AutoUpload
-Personal project to automatically handle converting xbox dvr clips to gifs and automatically uploading them to giphy.
+Personal project to automatically handle converting xbox dvr clips to gifs and automatically uploading them to giphy. Written in Python 2.7.
 
 ## Requirements
 * [ffmpeg](https://ffmpeg.org/) installed on your machine (and added to path for Windows users)
@@ -14,6 +14,6 @@ pip install -r requirements.txt
 ## Usage
 This script currently only works on the command line, although I have plans for adding a GUI with Tkinter. To run the script, use the following command:
 
-python autoupload.py **path to where your Xbox DVR clips go here**
+python autoupload.py "**path to where your Xbox DVR clips goes here**"
 
 If a path isn't given, the current directory will be used instead.
