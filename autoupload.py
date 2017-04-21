@@ -3,7 +3,7 @@ from sys import argv
 from time import sleep
 from subprocess import check_call
 import os.path
-import pyperclip
+from pyperclip import copy
 from requests import post
 from watchdog.observers import Observer
 from watchdog.events import PatternMatchingEventHandler
@@ -53,6 +53,7 @@ def upload_to_giphy(path_to_file):
     """
     files = {'file': open(path_to_file, 'rb')}
 
+    # giphy's public api key bc fuck their 'application process' for a project key
     giphy_request = post('http://upload.giphy.com/v1/gifs',
                          data={'username': 'AJwr', 'api_key': 'dc6zaTOxFJmzC'}, files=files)
 
@@ -64,7 +65,12 @@ def upload_to_giphy(path_to_file):
 
 
 def copy_to_clipboard(text):
-    pyperclip.copy(text)
+    """Copies the given text to the clipboard using pyperclips copy tool.
+    
+    :param text: the text to copy to the clipboard 
+    """
+    text.strip()
+    copy(text)
 
 
 def main():
