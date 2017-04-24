@@ -34,7 +34,7 @@ def convert(input_path):
 
     palette_path = os.path.dirname(input_path) + '\\palette.png'
 
-    filters = 'fps=30'
+    filters = 'fps=20,flags=lanczos'
 
     # generate palette for gif
     check_call(['ffmpeg', '-v', 'warning', '-i', input_path, '-vf', filters + ",palettegen", '-y', palette_path])
@@ -73,10 +73,10 @@ def copy_to_clipboard(text):
     copy(text)
 
 
-def main():
-    path = argv[1] if len(argv) > 1 else '.'
+def main(capture_path):
+    global observer
     observer = Observer()
-    observer.schedule(HandleDVR(), path, recursive=True)
+    observer.schedule(HandleDVR(), capture_path, recursive=True)
     observer.start()
     try:
         while True:
@@ -87,4 +87,5 @@ def main():
     observer.join()
 
 if __name__ == "__main__":
-    main()
+    capture_path = argv[1] if len(argv) > 1 else '.'
+    main(capture_path)
