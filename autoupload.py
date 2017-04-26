@@ -34,7 +34,7 @@ def convert(input_path):
 
     palette_path = os.path.dirname(input_path) + '\\palette.png'
 
-    filters = 'fps=20,flags=lanczos'
+    filters = 'fps=20'
 
     # generate palette for gif
     check_call(['ffmpeg', '-v', 'warning', '-i', input_path, '-vf', filters + ",palettegen", '-y', palette_path])
@@ -60,7 +60,6 @@ def upload_to_giphy(path_to_file):
     media_id = giphy_request.json()['data']['id']
     media_url = 'https://media3.giphy.com/media/%s/giphy.gif' % media_id
 
-    print(media_url)
     copy_to_clipboard(media_url)
 
 
@@ -74,7 +73,8 @@ def copy_to_clipboard(text):
 
 
 def main(capture_path):
-    global observer
+    if not capture_path:
+        capture_path = '.'
     observer = Observer()
     observer.schedule(HandleDVR(), capture_path, recursive=True)
     observer.start()
@@ -87,5 +87,5 @@ def main(capture_path):
     observer.join()
 
 if __name__ == "__main__":
-    capture_path = argv[1] if len(argv) > 1 else '.'
-    main(capture_path)
+    path = argv[1] if len(argv) > 1 else '.'
+    main(path)
