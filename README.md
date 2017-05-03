@@ -12,9 +12,11 @@ All of these can be installed with **pip** and the given **requirements.txt** wi
 pip install -r requirements.txt
 
 ## Usage
-This script currently only works on the command line, although I have plans for adding a GUI with Tkinter. To run the script, use the following command:
+This script current can work in two ways. It can either be run through the command line with the following command:
 
-python autoupload.py "**path to where your Xbox DVR clips goes here**"
+python autoupload.py **PATH_TO_CAPTURE_FOLDER**
+
+Or, by running the GUI which will allow you to select a folder and start/stop the script.
 
 If a path isn't given, the current directory will be used instead.
 
